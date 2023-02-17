@@ -1,0 +1,109 @@
+package Appium.Test;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.AndroidDriver;
+
+public class Login_c_ClientID {
+	AndroidDriver driver;
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void appiumTest() throws MalformedURLException, InterruptedException {
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		cap.setCapability("deviceName", "Redmi Note 7 Pro");
+		cap.setCapability("udid", "95b9be6e");
+		cap.setCapability("platformName", "Android");
+		cap.setCapability("platformVersion", "10");
+		cap.setCapability("appPackage", "com.sudassist.test");
+		cap.setCapability("appActivity", "com.master.app.mvp.launcher.AppLauncherActivity");
+		//cap.setCapability("autograntpermission", "true");
+		cap.setCapability("automationName", "UiAutomator2");
+		cap.setCapability("appWaitActivity", "com.master.app.base.ui.activities.FragmentHostActivity");
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723"),cap);
+		driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		
+		WebElement Login_other_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Login through other means']"));
+		Login_other_btn.click();
+		Thread.sleep(2000);
+		WebElement login_with= driver.findElement(By.xpath("//android.widget.TextView[@text='Login With']"));
+		String Actual_login_with= login_with.getAttribute("text");
+		System.out.println(" After clicking on Login through other means btn ..... " + Actual_login_with);
+		String expectedlogin_with="Login With";
+		Assert.assertEquals(Actual_login_with, expectedlogin_with);
+		
+		//Login with blank field
+		WebElement Login_c_ClientID= driver.findElement(By.xpath("//android.widget.RadioButton[@text='Client ID']"));
+		Login_c_ClientID.click();
+		Thread.sleep(2000);
+		WebElement Forgot_pwd= driver.findElement(By.xpath("//android.widget.TextView[@text='Forgot Password ?']"));
+		String Actual_Forgot_pwd= Forgot_pwd.getAttribute("text");
+		System.out.println(" When clicked on Client ID  radiobutton ..... " + Actual_Forgot_pwd);
+		String expectedForgot_pwd="Forgot Password ?";
+		Assert.assertEquals(Actual_Forgot_pwd, expectedForgot_pwd);
+		
+		WebElement Continue_btn_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Continue']"));
+		int log= driver.findElements(By.className("android.widget.EditText")).size();
+		
+		List<WebElement> a= driver.findElements(By.className("android.widget.EditText"));
+		Continue_btn_click.click();
+		Thread.sleep(2000);
+	
+		
+		WebElement clientID_error= driver.findElement(By.xpath("//android.widget.TextView[@text='Please enter Client ID']"));
+		String Actual_clientID_error= clientID_error.getAttribute("text");
+		System.out.println(" clicked on continue btn without any field ..... " + Actual_clientID_error);
+		String expectedclientID_error="Please enter Client ID";
+		Assert.assertEquals(Actual_clientID_error, expectedclientID_error);
+		
+		a.get(0).sendKeys("123456789");
+		Continue_btn_click.click();
+		Thread.sleep(2000);
+		WebElement pwd_error= driver.findElement(By.xpath("//android.widget.TextView[@text='Please enter password']"));
+		String Actual_pwd_error= pwd_error.getAttribute("text");
+		System.out.println(" clicked on continue btn with wrong Client ID field ..... " + Actual_pwd_error);
+		String expectedpwd_error="Please enter password";
+		Assert.assertEquals(Actual_pwd_error, expectedpwd_error);
+		
+		a.get(1).sendKeys("stringstt");
+		Continue_btn_click.click();
+		Thread.sleep(2000);
+		WebElement pwd_poily_error= driver.findElement(By.xpath("//android.widget.TextView[@text='Client ID or password is incorrect']"));
+		String Actual_pwd_clientID_error= pwd_poily_error.getAttribute("text");
+		System.out.println(" clicked on continue btn with wrong pwd field ..... " + Actual_pwd_clientID_error);
+		String expectedpwd_clientID_error="Client ID or password is incorrect";
+		Assert.assertEquals(Actual_pwd_clientID_error, expectedpwd_clientID_error);
+
+		a.get(0).clear();
+		Thread.sleep(2000);
+		a.get(0).sendKeys("87654321");
+		Continue_btn_click.click();
+		Thread.sleep(2000);
+		WebElement pwd_clientID_error1= driver.findElement(By.xpath("//android.widget.TextView[@text='Client ID or password is incorrect']"));
+		String Actual_pwd_clientID_error1= pwd_clientID_error1.getAttribute("text");
+		System.out.println(" clicked on continue btn with right Client ID and wrong pwd field ..... " + Actual_pwd_clientID_error1);
+		String expectedpwd_clientID_error1="Client ID or password is incorrect";
+		Assert.assertEquals(Actual_pwd_clientID_error1, expectedpwd_clientID_error1);
+		
+		a.get(1).clear();
+		a.get(1).sendKeys("stringst");
+		Thread.sleep(2000);
+		Continue_btn_click.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt4= driver.findElement(By.id("com.sudassist.test:id/title"));
+		String Actual_Err_Txt4 = Err_Txt4.getAttribute("text");
+		System.out.println(" clicked on continue btn with right Client ID  and right pwd field ..... " + Actual_Err_Txt4 );
+		String expectedResult4="Welcome to SUD Life";
+		Assert.assertEquals(Actual_Err_Txt4, expectedResult4);		
+	}
+}
