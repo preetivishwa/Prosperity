@@ -1,0 +1,97 @@
+package Appium.Test;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.AndroidDriver;
+
+public class Profile {
+	AndroidDriver driver;
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void appiumTest() throws MalformedURLException, InterruptedException {
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		cap.setCapability("deviceName", "Redmi Note 7 Pro");
+		cap.setCapability("udid", "95b9be6e");
+		cap.setCapability("platformName", "Android");
+		cap.setCapability("platformVersion", "10");
+		cap.setCapability("appPackage", "com.sudassist.test");
+		cap.setCapability("appActivity", "com.master.app.mvp.launcher.AppLauncherActivity");
+		//cap.setCapability("autograntpermission", "true");
+		cap.setCapability("automationName", "UiAutomator2");
+		cap.setCapability("appWaitActivity", "com.master.app.base.ui.activities.FragmentHostActivity");
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723"),cap);
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		
+		//Login without any field
+		 
+		WebElement Mobileno= driver.findElement(By.id("com.sudassist.test:id/no"));		
+		WebElement OTP_btn= driver.findElement(By.id("com.sudassist.test:id/button"));
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt = Err_Txt.getAttribute("text");
+		System.out.println(" Without no. Error text is ..... " + Actual_Err_Txt );
+		String expectedResult="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt, expectedResult);
+		
+		//Login with wrong field
+		Mobileno.sendKeys("234567890");
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt1= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt1 = Err_Txt1.getAttribute("text");
+		System.out.println(" With wrong field Error text is ..... " + Actual_Err_Txt1 );
+		String expectedResult1="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt1, expectedResult1);
+		Mobileno.clear();	
+		
+		//Login with valid field
+		Mobileno.sendKeys("9999999999");
+		OTP_btn.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt2= driver.findElement(By.className("android.widget.TextView"));
+		String Actual_Err_Txt2 = Err_Txt2.getAttribute("text");
+		System.out.println(" With valid field error text is ..... " + Actual_Err_Txt2 );
+		String expectedResult2="Enter 06 digit OTP";
+		Assert.assertEquals(Actual_Err_Txt2, expectedResult2);
+	
+		WebElement otpBox = driver.findElement(By.id("com.sudassist.test:id/pinView"));
+		WebElement Submit_btn= driver.findElement(By.id("com.sudassist.test:id/button"));		
+		
+		// Invalid OTP
+		otpBox.sendKeys("344833");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt3= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt3 = Err_Txt3.getAttribute("text");
+		System.out.println(" With wrong OTP field Error text is ..... " + Actual_Err_Txt3 );
+		String expectedResult3="OTP invalid";
+		Assert.assertEquals(Actual_Err_Txt3, expectedResult3);
+		otpBox.clear();
+		
+		//Valid OTP
+		otpBox.sendKeys("344433");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt4= driver.findElement(By.id("com.sudassist.test:id/title"));
+		String Actual_Err_Txt4 = Err_Txt4.getAttribute("text");
+		System.out.println(" With correct OTP field Error text is ..... " + Actual_Err_Txt4 );
+		String expectedResult4="Welcome to SUD Life";
+		Assert.assertEquals(Actual_Err_Txt4, expectedResult4);			
+	}
+
+
+}
