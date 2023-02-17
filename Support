@@ -1,0 +1,208 @@
+package Appium.Test;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.android.AndroidDriver;
+
+public class Support {
+	AndroidDriver driver;
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void appiumTest() throws MalformedURLException, InterruptedException {
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		cap.setCapability("deviceName", "Redmi Note 7 Pro");
+		cap.setCapability("udid", "95b9be6e");
+		cap.setCapability("platformName", "Android");
+		cap.setCapability("platformVersion", "10");
+		cap.setCapability("appPackage", "com.sudassist.test");
+		cap.setCapability("appActivity", "com.master.app.mvp.launcher.AppLauncherActivity");
+		//cap.setCapability("autograntpermission", "true");
+		cap.setCapability("automationName", "UiAutomator2");
+		cap.setCapability("appWaitActivity", "com.master.app.base.ui.activities.FragmentHostActivity");
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723"),cap);
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		
+		//Login without any field
+		 
+		WebElement Mobileno= driver.findElement(By.id("com.sudassist.test:id/no"));		
+		WebElement OTP_btn= driver.findElement(By.id("com.sudassist.test:id/button"));
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt = Err_Txt.getAttribute("text");
+		System.out.println(" Without no. Error text is ..... " + Actual_Err_Txt );
+		String expectedResult="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt, expectedResult);
+		
+		//Login with wrong field
+		Mobileno.sendKeys("234567890");
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt1= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt1 = Err_Txt1.getAttribute("text");
+		System.out.println(" With wrong field Error text is ..... " + Actual_Err_Txt1 );
+		String expectedResult1="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt1, expectedResult1);
+		Mobileno.clear();	
+		
+		//Login with valid field
+		Mobileno.sendKeys("9999999999");
+		OTP_btn.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt2= driver.findElement(By.className("android.widget.TextView"));
+		String Actual_Err_Txt2 = Err_Txt2.getAttribute("text");
+		System.out.println(" With valid field error text is ..... " + Actual_Err_Txt2 );
+		String expectedResult2="Enter 06 digit OTP";
+		Assert.assertEquals(Actual_Err_Txt2, expectedResult2);
+	
+		WebElement otpBox = driver.findElement(By.id("com.sudassist.test:id/pinView"));
+		WebElement Submit_btn= driver.findElement(By.id("com.sudassist.test:id/button"));		
+		
+		// Invalid OTP
+		otpBox.sendKeys("344833");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt3= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt3 = Err_Txt3.getAttribute("text");
+		System.out.println(" With wrong OTP field Error text is ..... " + Actual_Err_Txt3 );
+		String expectedResult3="OTP invalid";
+		Assert.assertEquals(Actual_Err_Txt3, expectedResult3);
+		otpBox.clear();
+		
+		//Valid OTP
+		otpBox.sendKeys("344433");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt4= driver.findElement(By.id("com.sudassist.test:id/title"));
+		String Actual_Err_Txt4 = Err_Txt4.getAttribute("text");
+		System.out.println(" With correct OTP field Error text is ..... " + Actual_Err_Txt4 );
+		String expectedResult4="Welcome to SUD Life";
+		Assert.assertEquals(Actual_Err_Txt4, expectedResult4);
+		
+		WebElement support_btn= driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc=\"Support\"]/android.widget.FrameLayout/android.widget.ImageView"));
+		support_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Support_txt= driver.findElement(By.xpath("//android.widget.EditText[@text='Type a message...']"));		
+		String Actual_support= Support_txt.getAttribute("text");
+		System.out.println(" When clicked on support btn ..... " + Actual_support );
+		String expectedsupport="Type a message...";
+		Assert.assertEquals(Actual_support, expectedsupport);
+		
+		
+		WebElement call_icon= driver.findElement(By.id("com.sudassist.test:id/call"));
+		call_icon.click();
+		Thread.sleep(10000);
+
+		WebElement call_us= driver.findElement(By.xpath("//android.widget.TextView[@text='Toll-Free 1800 266 8833']"));		
+		String Actual_call= call_us.getAttribute("text");
+		System.out.println(" When clicked on call icon ..... " + Actual_call );
+		String expectedcall="Toll-Free 1800 266 8833";
+		Assert.assertEquals(Actual_call, expectedcall);
+		
+		WebElement call_us_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Call Us']"));
+		call_us_btn.click();
+		Thread.sleep(2000);
+
+		WebElement sim1_btn= driver.findElement(By.id("com.android.contacts:id/call_sim1"));		
+		String Actual_call_sim= sim1_btn.getAttribute("text");
+		System.out.println(" When clicked on call btn ..... " + Actual_call_sim );
+		String expectedsimcall="Idea";
+		Assert.assertEquals(Actual_call_sim, expectedsimcall);
+
+		
+		WebElement sim1_btn1= driver.findElement(By.xpath("//android.widget.Button[@text='Idea']"));	
+		sim1_btn1.click();
+		Thread.sleep(2000);
+		System.out.println("Ongoing call");
+		WebElement cancel_call_btn= driver.findElement(By.xpath("//android.widget.LinearLayout[@content-desc=\"End\"]/android.widget.ImageView"));		
+		cancel_call_btn.click();
+		System.out.println("call cancelled");
+		driver.navigate().back();
+		driver.navigate().back();
+		
+		
+		WebElement dot_icon= driver.findElement(By.id("com.sudassist.test:id/options"));
+		dot_icon.click();
+		Thread.sleep(2000);
+
+		WebElement write_to_us_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Write to Us']"));		
+		String Actual_write= write_to_us_btn.getAttribute("text");
+		System.out.println(" When clicked on call btn ..... " + Actual_write );
+		String expectedwrite="Write to Us";
+		Assert.assertEquals(Actual_write, expectedwrite);
+
+		WebElement write_to_us_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Write to Us']"));	
+		write_to_us_click.click();
+		Thread.sleep(2000);
+
+		WebElement Email_us_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Email Us']"));		
+		String Actual_email= Email_us_btn.getAttribute("text");
+		System.out.println(" When clicked on write to us btn ..... " + Actual_email );
+		String expectedemail="Email Us";
+		Assert.assertEquals(Actual_email, expectedemail);
+		
+		WebElement Email_us_btn_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Email Us']"));
+		Email_us_btn_click.click();
+		Thread.sleep(2000);
+
+		WebElement Gmail_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Gmail']"));		
+		String Actual_gmail= Gmail_btn.getAttribute("text");
+		System.out.println(" When clicked on email us  btn ..... " + Actual_gmail );
+		String expectedgmail="Gmail";
+		Assert.assertEquals(Actual_gmail, expectedgmail);
+		
+		WebElement Gmail_btn_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Gmail']"));	
+		Gmail_btn_click.click();
+		Thread.sleep(2000);
+
+		WebElement compose_txt= driver.findElement(By.xpath("//android.widget.TextView[@text='Compose']"));		
+		String Actual_compose= compose_txt.getAttribute("text");
+		System.out.println(" When clicked on gmail ..... " + Actual_compose );
+		String expectedcompose="Compose";
+		Assert.assertEquals(Actual_compose, expectedcompose);
+		driver.navigate().back();
+		driver.navigate().back();
+		
+		
+		//WebElement dot_icon= driver.findElement(By.id("com.sudassist.test:id/options"));
+		dot_icon.click();
+		Thread.sleep(2000);
+
+		WebElement Locate_us_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Locate Us']"));		
+		String Actual_locate= Locate_us_btn.getAttribute("text");
+		System.out.println(" When clicked on locate us btn ..... " + Actual_locate );
+		String expectedlocate="Locate Us";
+		Assert.assertEquals(Actual_locate, expectedlocate);
+		
+		WebElement Locate_us_btn_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Locate Us']"));	
+		Locate_us_btn_click.click();
+		
+		WebElement back_btn_click= driver.findElement(By.id("com.sudassist.test:id/back"));	
+		back_btn_click.click();
+		Thread.sleep(2000);
+
+		WebElement back_and_support_page= driver.findElement(By.xpath("//android.widget.TextView[@text='Support']"));		
+		String Actual_back_suport= back_and_support_page.getAttribute("text");
+		System.out.println(" When clicked on back btn ..... " + Actual_back_suport );
+		String expectedback_support="Support";
+		Assert.assertEquals(Actual_back_suport, expectedback_support);
+		
+
+	}
+}
+
+
