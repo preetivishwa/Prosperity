@@ -1,0 +1,219 @@
+package Appium.Test;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+
+public class Partiall_withdrawal {
+	AndroidDriver driver;
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void appiumTest() throws MalformedURLException, InterruptedException {
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		cap.setCapability("deviceName", "Redmi Note 7 Pro");
+		cap.setCapability("udid", "95b9be6e");
+		cap.setCapability("platformName", "Android");
+		cap.setCapability("platformVersion", "10");
+		cap.setCapability("appPackage", "com.sudassist.test");
+		cap.setCapability("appActivity", "com.master.app.mvp.launcher.AppLauncherActivity");
+		//cap.setCapability("autograntpermission", "true");
+		cap.setCapability("automationName", "UiAutomator2");
+		cap.setCapability("appWaitActivity", "com.master.app.base.ui.activities.FragmentHostActivity");
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723"),cap);
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		Thread.sleep(4000);
+		
+		//Login without any field
+		
+		WebElement Mobileno= driver.findElement(By.id("com.sudassist.test:id/no"));		
+		WebElement OTP_btn= driver.findElement(By.id("com.sudassist.test:id/button"));
+		
+		 OTP_btn.click();
+		 Thread.sleep(2000);
+
+		WebElement Err_Txt= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt = Err_Txt.getAttribute("text");
+		System.out.println(" Without no. Error text is ..... " + Actual_Err_Txt );
+		String expectedResult="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt, expectedResult);
+		
+		//Login with wrong field
+		Mobileno.sendKeys("234567809");
+		OTP_btn.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt1=driver.findElement(By.xpath("//android.widget.TextView[@text='Please enter valid mobile no.']"));
+		String Actual_Err_Txt1 = Err_Txt1.getAttribute("text");
+		System.out.println(" With wrong field Error text is ..... " + Actual_Err_Txt1 );
+		String expectedResult1="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt1, expectedResult1);
+		Mobileno.clear();	
+		
+		
+		//Login with valid field
+		Mobileno.sendKeys("9999999999");
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt2=driver.findElement(By.xpath("//android.widget.TextView[@text='Enter 06 digit OTP']"));
+		String Actual_Err_Txt2 = Err_Txt2.getAttribute("text");
+		System.out.println(" With valid field error text is ..... " + Actual_Err_Txt2 );
+		String expectedResult2="Enter 06 digit OTP";
+		Assert.assertEquals(Actual_Err_Txt2, expectedResult2);
+	
+		WebElement otpBox = driver.findElement(By.id("com.sudassist.test:id/pinView"));
+		WebElement Submit_btn= driver.findElement(By.id("com.sudassist.test:id/button"));
+		
+		
+		// Invalid OTP
+		otpBox.sendKeys("344833");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt3= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt3 = Err_Txt3.getAttribute("text");
+		System.out.println(" With wrong OTP field Error text is ..... " + Actual_Err_Txt3 );
+		String expectedResult3="OTP invalid";
+		Assert.assertEquals(Actual_Err_Txt3, expectedResult3);
+		otpBox.clear();
+		
+		
+		//Valid OTP
+		otpBox.sendKeys("344433");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt4= driver.findElement(By.id("com.sudassist.test:id/title"));
+		String Actual_Err_Txt4 = Err_Txt4.getAttribute("text");
+		System.out.println(" With correct OTP field Error text is ..... " + Actual_Err_Txt4 );
+		String expectedResult4="Welcome to SUD Life";
+		Assert.assertEquals(Actual_Err_Txt4, expectedResult4);		
+		
+		WebElement Arrow_btn = driver.findElement(By.className("android.widget.ImageView"));
+		Arrow_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt5= driver.findElement(By.className("android.widget.TextView"));
+		//WebElement Err_Txt5= driver.findElement(By.xpath("//android.widget.TextView[@Text='Policy No. 12345678']"));
+		String Actual_Err_Txt5 = Err_Txt5.getAttribute("text");
+		System.out.println(" Sud Life century royale click event print text ..... " + Actual_Err_Txt5 );
+		String expectedResult5="Welcome to SUD Life";
+		Assert.assertEquals(Actual_Err_Txt5, expectedResult5);	
+		
+		
+		WebElement Policy_Holder_Text= driver.findElement(By.xpath("//android.widget.TextView[@text='Policy Holder :']"));
+		Policy_Holder_Text.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt6= driver.findElement(By.id("com.sudassist.test:id/desc"));
+		String Actual_Err_Txt6 = Err_Txt6.getAttribute("text");
+		System.out.println(" After clicking on Policy Holder ..... " + Actual_Err_Txt6);
+		String expectedResult6="Policy Details";
+		Assert.assertEquals(Actual_Err_Txt6, expectedResult6);	
+		
+		
+		List<WebElement> Lists = driver.findElements(By.xpath("//android.widget.TextView[@text='Policy Holder :']"));		
+		for(WebElement p : Lists)
+			System.out.println(p.getAttribute("text"));
+		//driver.navigate().forward();
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.2, 0.5, 0.7);				
+		
+		WebElement Manage_Policy_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Manage Policy']"));
+		Manage_Policy_btn.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt7= driver.findElement(By.id("com.sudassist.test:id/desc"));
+		String Actual_Err_Txt7 = Err_Txt7.getAttribute("text");
+		System.out.println(" After clicking on Manage policy btn ..... " + Actual_Err_Txt7);
+		String expectedResult7="SUD Life Saral Jeevan Bima";
+		Assert.assertEquals(Actual_Err_Txt7, expectedResult7);	
+		
+		WebElement btn_partial_withdarwal= driver.findElement(By.id("com.sudassist.test:id/btn_partial_withdarwal"));
+		btn_partial_withdarwal.click();
+		Thread.sleep(2000);
+		WebElement Partial_with= driver.findElement(By.xpath("//android.widget.TextView[@text='Partial Withdrawal is available after a Lock-In period 5 Years from Policy Purchased Date']"));
+		String Actual_partial= Partial_with.getAttribute("text");
+		System.out.println(" After clicking on partial_withdarwal btn ..... " + Actual_partial);
+		String expectedpartial="Partial Withdrawal is available after a Lock-In period 5 Years from Policy Purchased Date";
+		Assert.assertEquals(Actual_partial, expectedpartial);	
+		
+		WebElement change_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Change']"));
+		change_btn.click();
+		Thread.sleep(2000);
+		WebElement trf_btn= driver.findElement(By.xpath("//android.widget.TextView[@text='Transfer To']"));
+		String Actual_trf= trf_btn.getAttribute("text");
+		System.out.println(" After clicking on change btn ..... " + Actual_trf);
+		String expectedtrf="Transfer To";
+		Assert.assertEquals(Actual_trf, expectedtrf);	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);	
+		
+		WebElement withdrawbtn_btn= driver.findElement(By.xpath("//android.widget.Button[@text='Withdraw']"));
+		withdrawbtn_btn.click();
+		Thread.sleep(1000);
+		WebElement trf_btn1= driver.findElement(By.xpath("//android.widget.TextView[@text='Successfull Withdrawal']"));
+		String Actual_trf1= trf_btn1.getAttribute("text");
+		System.out.println(" After clicking on withdraw btn ..... " + Actual_trf1);
+		String expectedtrf1="Successfull Withdrawal";
+		Assert.assertEquals(Actual_trf1, expectedtrf1);	
+		driver.navigate().back();		
+		
+		/*
+		WebElement backbtn_btn= driver.findElement(By.id("com.sudassist.test:id/back"));
+		backbtn_btn.click();
+		Thread.sleep(2000);
+		WebElement back_btn1= driver.findElement(By.xpath("//android.widget.TextView[@text='Partial Withdrawal']"));
+		String Actualback_trf1= back_btn1.getAttribute("text");
+		System.out.println(" After clicking on back btn ..... " + Actualback_trf1);
+		String expectedbacktrf1="Partial Withdrawal";
+		Assert.assertEquals(Actualback_trf1, expectedbacktrf1);	
+		
+		WebElement backbtn1_btn= driver.findElement(By.id("com.sudassist.test:id/back"));
+		backbtn1_btn.click();
+		WebElement back1_btn1= driver.findElement(By.xpath("//android.widget.TextView[@text='Partial Withdrawal']"));
+		String Actualback1_trf1= back1_btn1.getAttribute("text");
+		System.out.println(" After clicking on back btn again ..... " + Actualback1_trf1);
+			*/
+		
+		/*
+		WebElement Enter_amount= driver.findElement(By.id("com.sudassist.test:id/input"));
+		WebElement Withdraw_btn= driver.findElement(By.xpath("//android.widget.Button[@text='WITHDRAW']"));
+		Enter_amount.sendKeys("200000");
+		Withdraw_btn.click();
+		System.out.println("Successful withdrawal");
+		driver.navigate().back();
+		
+		*/
+		
+		
+		
+		
+}
+	public void scroll(AndroidDriver driver, double start_xd, double start_yd, double end_xd, double end_yd) throws InterruptedException {
+		Dimension dimension= driver.manage().window().getSize();
+		int start_x =(int) (dimension.width * start_xd);
+		int start_y =(int) (dimension.height * start_yd);		
+		int end_x =(int) (dimension.width * end_xd);
+		int end_y =(int) (dimension.height * end_yd);		
+		TouchAction touch = new TouchAction(driver);
+		
+		touch.press(PointOption.point(start_x, start_y))
+			.waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
+			.moveTo(PointOption.point(end_x, end_y)).release().perform();		
+		
+		
+	}
+}
