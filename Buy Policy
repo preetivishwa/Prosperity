@@ -1,0 +1,218 @@
+package Appium.Test;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
+
+public class Buy_policy {
+	AndroidDriver driver;
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void appiumTest() throws MalformedURLException, InterruptedException {
+		
+		DesiredCapabilities cap = new DesiredCapabilities();
+		cap.setCapability("deviceName", "Redmi Note 7 Pro");
+		cap.setCapability("udid", "95b9be6e");
+		cap.setCapability("platformName", "Android");
+		cap.setCapability("platformVersion", "10");
+		cap.setCapability("appPackage", "com.sudassist.test");
+		cap.setCapability("appActivity", "com.master.app.mvp.launcher.AppLauncherActivity");
+		//cap.setCapability("autograntpermission", "true");
+		cap.setCapability("automationName", "UiAutomator2");
+		cap.setCapability("appWaitActivity", "com.master.app.base.ui.activities.FragmentHostActivity");
+		driver = new AndroidDriver(new URL("http://127.0.0.1:4723"),cap);
+		//driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+		
+		//Login without any field
+		 
+		WebElement Mobileno= driver.findElement(By.id("com.sudassist.test:id/no"));		
+		WebElement OTP_btn= driver.findElement(By.id("com.sudassist.test:id/button"));
+	
+		/*
+		 OTP_btn.click();
+		
+		Thread.sleep(2000);
+
+		WebElement Err_Txt= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt = Err_Txt.getAttribute("text");
+		System.out.println(" Without no. Error text is ..... " + Actual_Err_Txt );
+		String expectedResult="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt, expectedResult);
+		
+		//Login with wrong field
+		Mobileno.sendKeys("234567890");
+		OTP_btn.click();
+		Thread.sleep(2000);
+
+		WebElement Err_Txt1= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt1 = Err_Txt1.getAttribute("text");
+		System.out.println(" With wrong field Error text is ..... " + Actual_Err_Txt1 );
+		String expectedResult1="Please enter valid mobile no.";
+		Assert.assertEquals(Actual_Err_Txt1, expectedResult1);
+		Mobileno.clear();	
+		 */
+		
+		//Login with valid field
+		Mobileno.sendKeys("9999999999");
+		OTP_btn.click();
+		Thread.sleep(2000);
+		WebElement Err_Txt2= driver.findElement(By.className("android.widget.TextView"));
+		String Actual_Err_Txt2 = Err_Txt2.getAttribute("text");
+		System.out.println(" With valid field error text is ..... " + Actual_Err_Txt2 );
+		String expectedResult2="Enter 06 digit OTP";
+		Assert.assertEquals(Actual_Err_Txt2, expectedResult2);
+	
+		WebElement otpBox = driver.findElement(By.id("com.sudassist.test:id/pinView"));
+		WebElement Submit_btn= driver.findElement(By.id("com.sudassist.test:id/button"));		
+		
+		/*
+		// Invalid OTP
+		otpBox.sendKeys("344833");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement Err_Txt3= driver.findElement(By.id("com.sudassist.test:id/error"));
+		String Actual_Err_Txt3 = Err_Txt3.getAttribute("text");
+		System.out.println(" With wrong OTP field Error text is ..... " + Actual_Err_Txt3 );
+		String expectedResult3="OTP invalid";
+		Assert.assertEquals(Actual_Err_Txt3, expectedResult3);
+		otpBox.clear();
+		*/
+		
+		//Valid OTP
+		otpBox.sendKeys("344433");
+		Submit_btn.click();	
+		Thread.sleep(2000);
+
+		WebElement buy_policy= driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc=\"Buy Policy\"]/android.view.ViewGroup/android.widget.TextView"));
+		String Actual_buy_policy= buy_policy.getAttribute("text");
+		System.out.println(" With correct OTP redirected to home page  ..... " + Actual_buy_policy );
+		String expectedbuy_policy="Buy Policy";
+		Assert.assertEquals(Actual_buy_policy, expectedbuy_policy);			
+		
+		
+		WebElement buy_policy_click= driver.findElement(By.xpath("//android.widget.FrameLayout[@content-desc=\"Buy Policy\"]/android.view.ViewGroup/android.widget.TextView"));
+		buy_policy_click.click();
+		Thread.sleep(2000);
+		WebElement buy_policy_plans= driver.findElement(By.xpath("//android.widget.TextView[@text='Policy Plans']"));	
+		String Actual_buy_policy_plan= buy_policy_plans.getAttribute("text");
+		System.out.println(" When clicked on buy policy btn  ..... " + Actual_buy_policy_plan );
+		String expectedbuy_policy_plan="Policy Plans";
+		Assert.assertEquals(Actual_buy_policy_plan, expectedbuy_policy_plan);				
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		
+		WebElement plan_one= driver.findElement(By.xpath("//android.widget.TextView[@text='SUD LIFE Century royale']"));
+		plan_one.click();
+		Thread.sleep(2000);
+		WebElement income_benefit= driver.findElement(By.xpath("//android.widget.TextView[@text='Income Benefit']"));	
+		String Actual_income_benefit= income_benefit.getAttribute("text");
+		System.out.println("  When clicked on SUD LIFE Century royale policy plan ..... " + Actual_income_benefit );
+		String expectedincome_benefit="Income Benefit";
+		Assert.assertEquals(Actual_income_benefit, expectedincome_benefit);				
+	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.2, 0.5, 0.7);	
+		scroll(driver, 0.5, 0.2, 0.5, 0.7);	
+		scroll(driver, 0.5, 0.2, 0.5, 0.7);	
+
+		
+		
+		WebElement income_benefit_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Income Benefit']"));	
+		income_benefit_click.click();
+		Thread.sleep(2000);
+		WebElement Benefits= driver.findElement(By.xpath("//android.widget.TextView[@text='Benefits']"));	
+		String Actual_Benefits= Benefits.getAttribute("text");
+		System.out.println(" when clicked on Income benefit for descrition  ..... " + Actual_Benefits );
+		String expectedBenefits="Benefits";
+		Assert.assertEquals(Actual_Benefits, expectedBenefits);	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		
+		
+		WebElement income_benefit_backclick= driver.findElement(By.id("com.sudassist.test:id/back"));	
+		income_benefit_backclick.click();
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		Thread.sleep(2000);
+		WebElement Choose_Your_Plan= driver.findElement(By.xpath("//android.widget.TextView[@text='Choose Your Plan']"));	
+		String Actual_Choose_Your_Plan= Choose_Your_Plan.getAttribute("text");
+		System.out.println(" when clicked on back button  ..... " + Actual_Choose_Your_Plan );
+		String expectedChoose_Your_Plan="Choose Your Plan";
+		Assert.assertEquals(Actual_Choose_Your_Plan, expectedChoose_Your_Plan);	
+		
+		WebElement PLanB= driver.findElement(By.className("android.view.View"));	
+		PLanB.click();
+		Thread.sleep(2000);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		
+		
+		WebElement Buy_pp= driver.findElement(By.xpath("//android.widget.TextView[@text='Buy Policy']"));	
+		Buy_pp.click();
+		Thread.sleep(2000);
+		WebElement personal_D= driver.findElement(By.xpath("//android.widget.TextView[@text='Personal Details']"));	
+		String Actual_personal_D= personal_D.getAttribute("text");
+		System.out.println(" Choosing plan B and clicked on buy policy ..... " + Actual_personal_D );
+		String expectedpersonal_D="Personal Details";
+		Assert.assertEquals(Actual_personal_D, expectedpersonal_D);	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+	
+		WebElement Nominee_Buy_pp= driver.findElement(By.xpath("//android.widget.CheckBox[@text='RajXXX']"));	
+		Nominee_Buy_pp.click();
+		Thread.sleep(2000);
+		WebElement Proceedpersonal_D= driver.findElement(By.xpath("//android.widget.TextView[@text='Proceed']"));	
+		String Actual_Proceedpersonal_D= Proceedpersonal_D.getAttribute("text");
+		System.out.println(" Adding nominee Rajxx ..... " + Actual_Proceedpersonal_D );
+		String expectedProceedpersonal_D="Proceed";
+		Assert.assertEquals(Actual_Proceedpersonal_D, expectedProceedpersonal_D);	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		
+		WebElement Proceedpersonal_D_click= driver.findElement(By.xpath("//android.widget.TextView[@text='Proceed']"));	
+		Proceedpersonal_D_click.click();
+		Thread.sleep(2000);
+		WebElement Proceed_pay_D= driver.findElement(By.xpath("//android.widget.TextView[@text='Payment Details']"));	
+		String Actual_Proceed_pay_D= Proceed_pay_D.getAttribute("text");
+		System.out.println(" Clicked on proceed ..... " + Actual_Proceed_pay_D );
+		String expectedProceed_pay_D="Payment Details";
+		Assert.assertEquals(Actual_Proceed_pay_D, expectedProceed_pay_D);	
+		scroll(driver, 0.5, 0.7, 0.5, 0.2);
+		
+		WebElement Proceed_pay_D_Proceed= driver.findElement(By.xpath("//android.widget.Button[@text='Proceed']"));	
+		Proceed_pay_D_Proceed.click();
+		System.out.println("Congratulations you are secured with SUD lifes plan");
+		
+	
+	}
+	
+	
+	public void scroll(AndroidDriver driver, double start_xd, double start_yd, double end_xd, double end_yd) throws InterruptedException {
+		Dimension dimension= driver.manage().window().getSize();
+		int start_x =(int) (dimension.width * start_xd);
+		int start_y =(int) (dimension.height * start_yd);		
+		int end_x =(int) (dimension.width * end_xd);
+		int end_y =(int) (dimension.height * end_yd);		
+		TouchAction touch = new TouchAction(driver);
+		
+		touch.press(PointOption.point(start_x, start_y))
+			.waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
+			.moveTo(PointOption.point(end_x, end_y)).release().perform();		
+		
+		
+	}
+
+}
